@@ -2,21 +2,27 @@
 
 import React from "react";
 import {
-  FaXTwitter,
+  FaTwitter,  // Shortened the icon names for better readability
   FaGithub,
   FaInstagram,
   FaRss,
   FaLinkedinIn,
-} from "react-icons/fa6";
+} from "react-icons/fa";
 import { TbMailFilled } from "react-icons/tb";
 import { metaData, socialLinks } from "app/config";
+import type { IconType } from "react-icons";
 
 const YEAR = new Date().getFullYear();
 
-function SocialLink({ href, icon: Icon }) {
+// ✅ Correct type for react-icons
+type SocialLinkProps = {
+  href: string;
+  icon: IconType;
+};
+
+function SocialLink({ href, icon: Icon }: SocialLinkProps) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer">
-      <Icon />
     </a>
   );
 }
@@ -24,14 +30,12 @@ function SocialLink({ href, icon: Icon }) {
 function SocialLinks() {
   return (
     <div className="flex text-lg gap-3.5 float-right transition-opacity duration-300 hover:opacity-90">
-      <SocialLink href={socialLinks.twitter} icon={FaXTwitter} />
+      <SocialLink href={socialLinks.twitter} icon={FaTwitter} />
       <SocialLink href={socialLinks.github} icon={FaGithub} />
       <SocialLink href={socialLinks.instagram} icon={FaInstagram} />
       <SocialLink href={socialLinks.linkedin} icon={FaLinkedinIn} />
       <SocialLink href={socialLinks.email} icon={TbMailFilled} />
-      <a href="/rss.xml" target="_self">
-        <FaRss />
-      </a>
+      <SocialLink href="/rss.xml" icon={FaRss} />
     </div>
   );
 }
