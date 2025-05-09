@@ -1,32 +1,39 @@
-// "use client";
-// import { useEffect, useState } from "react";
+'use client';
 
-// let YouTube: any = null;
+import { useEffect, useState } from 'react';
+import type { YouTubeProps } from 'react-youtube';
 
-// export function YouTubeComponent(props: any) {
-//  const [mounted, setMounted] = useState(false);
+export default function YouTubeComponent(props: YouTubeProps) {
+  const [YouTube, setYouTube] = useState<React.ComponentType<YouTubeProps> | null>(null);
 
-//  useEffect(() => {
-    // Dynamically import YouTube to avoid SSR issues
-  //  (async () => {
-  //    const mod = await import("react-youtube");
-  //    YouTube = mod.default;
-  //    setMounted(true);
-  //  })();
-  // }, []);
+  useEffect(() => {
+    let isMounted = true;
 
-//  if (!mounted || !YouTube) return null;
+    import('react-youtube').then((mod) => {
+      if (isMounted) {
+        // ✅ Correct: Set the component directly, not as a function
+        setYouTube(mod.default);
+      }
+    });
 
-//  return (
-  //  <div className="relative w-full h-0 pb-[56.25%] my-6">
-    //  <YouTube
-  //      opts={{
-//          height: "100%",
- //         width: "100%",
- //       }}
-//        {...props}
-//        className="absolute top-0 left-0 w-full h-full"
-//      />
-//    </div>
-//  );
-//}
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (!YouTube) return null;
+
+  return (
+    <div className="relative w-full h-0 pb-[56.25%] my-6">
+      <YouTube
+        {...props}
+        opts={{
+          height: '100%',
+          width: '100%',
+          ...(props?.opts || {}),
+        }}
+        className="absolute top-0 left-0 w-full h-full"
+      />
+    </div>
+  );
+}
