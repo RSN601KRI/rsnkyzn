@@ -111,7 +111,6 @@ let components = {
   a: CustomLink,
   StaticTweet: TweetComponent,
   Caption: CaptionComponent,
-//  YouTube: YouTubeComponent,
   code: Code,
   Table,
   del: Strikethrough,
